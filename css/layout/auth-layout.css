@@ -1,0 +1,95 @@
+/* Layout das telas de autenticação: dois painéis, padrão animado e responsivo */
+/* Grid de duas colunas iguais ocupando a tela toda */
+.login {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* ---------- 4. Painel esquerdo ---------- */
+/* Fundo azul com o padrão da logo em movimento.
+   Camadas:
+   - .login__brand          -> cor de fundo e "janela" que corta o excesso
+   - .login__brand::before  -> padrão da logo, inclinado, deslizando na diagonal
+   - .login__brand::after   -> brilho suave que atravessa o painel */
+.login__brand {
+  position: relative;
+  overflow: hidden;               /* esconde o que sai do painel ao girar/mover */
+  background: var(--blue);
+}
+
+/* Padrão: camada maior que o painel (inset negativo) para não aparecer
+   canto vazio depois de girar. */
+.login__brand::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: url("../../assets/img/pattern-tile.png") 0 0 / 300px 120px repeat;
+  transform: rotate(-15deg);
+  animation: pattern-drift 24s linear infinite;
+}
+
+/* Brilho: faixa clara e translúcida que passa lentamente sobre o padrão */
+.login__brand::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, .16) 50%,
+    transparent 65%
+  );
+  background-size: 250% 100%;
+  animation: pattern-shine 9s ease-in-out infinite;
+}
+
+/* Desliza exatamente 1 tile (300x120): o fim é igual ao início, então o loop é contínuo */
+@keyframes pattern-drift {
+  to { background-position: 300px 120px; }
+}
+
+/* Move o brilho da direita para a esquerda e volta */
+@keyframes pattern-shine {
+  0%   { background-position: 100% 0; }
+  50%  { background-position: 0 0; }
+  100% { background-position: 100% 0; }
+}
+
+/* Acessibilidade: quem prefere menos movimento no sistema vê o padrão parado */
+@media (prefers-reduced-motion: reduce) {
+  .login__brand::before,
+  .login__brand::after { animation: none; }
+}
+
+/* ---------- 5. Painel direito ---------- */
+/* Coluna: logo no topo, formulário ocupa o resto */
+.login__panel {
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 56px 24px 48px;
+}
+
+.login__logo {
+  width: 300px;
+  height: auto;
+  max-width: 100%;
+}
+
+/* Formulário: coluna centralizada com largura máxima */
+.form {
+  width: 100%;
+  max-width: 440px;           /* antes 330px: formulário mais largo */
+  margin-top: 36px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Em telas pequenas, esconde o painel decorativo e usa só o formulário */
+@media (max-width: 800px) {
+  .login { grid-template-columns: 1fr; }
+  .login__brand { display: none; }
+  .form { margin-top: 48px; }
+}

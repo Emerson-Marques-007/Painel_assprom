@@ -1,0 +1,40 @@
+/* Abas Professor / Aluno + troca animada de conteúdo */
+/* O "thumb" azul desliza de uma aba para a outra */
+.tabs {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: rgba(17, 17, 17, .1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, .12);
+}
+.tabs__thumb {
+  position: absolute;
+  top: 4px; bottom: 4px; left: 4px;
+  width: calc(50% - 4px);
+  border-radius: var(--radius-pill);
+  background: var(--blue);
+  box-shadow: 0 6px 14px -8px rgba(69, 96, 225, .9);
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1);
+}
+.tabs[data-active="aluno"] .tabs__thumb { transform: translateX(100%); }
+.tab {
+  position: relative; z-index: 1;
+  height: 34px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: #33334d;
+  cursor: pointer;
+  transition: color .25s;
+}
+.tab[aria-selected="true"] { color: #fff; }
+.tab:focus-visible { outline: 3px solid rgba(69, 96, 225, .5); outline-offset: 2px; }
+
+/* Texto de apoio + conteúdo que troca ao mudar de aba (fade rápido) */
+.form__hint { margin: 22px 0 18px; font-size: 14px; color: #444; }
+.swap { animation: swap-in .35s ease-out; }
+@keyframes swap-in { from { opacity: 0; transform: translateY(6px); } }

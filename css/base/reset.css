@@ -1,0 +1,9 @@
+/* Reset básico */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  color: var(--text);
+  font-size: 14px;
+}

@@ -1,0 +1,11 @@
+/* Variáveis globais: cores, raio e fonte */
+:root {
+  --blue:        #4560e1;   /* azul principal da marca (painel, botão, bordas) */
+  --blue-link:   #1a6bff;   /* azul do link "Crie agora" */
+  --bg-panel:    #ffffff;   /* cinza do painel direito */
+  --text:        #111111;   /* texto principal */
+  --text-muted:  #918e8e;   /* placeholders e textos secundários */
+  --danger:      #c62828;   /* mensagens de erro */
+  --radius-pill: 999px;     /* bordas totalmente arredondadas */
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+}

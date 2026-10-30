@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Entrar | ASSPROM</title>
+
+  <!-- Fonte do projeto (Inter) via Google Fonts, com fallback no CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="login">
+
+    <!-- Painel esquerdo: apenas decorativo (padrão animado da marca) -->
+    <aside class="login__brand" aria-hidden="true"></aside>
+
+    <!-- Painel direito -->
+    <section class="login__panel">
+      <img class="login__logo" src="assets/img/logo.png" alt="ASSPROM">
+
+      <form class="form" id="login-form" novalidate>
+
+        <!-- Abas: o JS troca rótulo, ícone, placeholder e link de cadastro -->
+        <div class="tabs" role="tablist" data-active="professor">
+          <span class="tabs__thumb" aria-hidden="true"></span>
+          <button class="tab" type="button" role="tab" data-mode="professor" aria-selected="true">Professor</button>
+          <button class="tab" type="button" role="tab" data-mode="aluno" aria-selected="false">Aluno</button>
+        </div>
+
+        <p class="form__hint" id="form-hint" data-swap></p>
+
+        <div class="field" data-swap>
+          <label class="field__label" for="identifier" id="identifier-label">E-mail institucional</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true" data-icon="mail"><rect x="1.5" y="3" width="13" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 4l6 4.5L14 4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <input class="field__input" id="identifier" name="identifier" type="email" placeholder="nome@escola.org.br" autocomplete="username" data-rules="required email" data-required="Informe seu e-mail institucional.">
+          </div>
+          <p class="field__error" id="identifier-error" role="alert"></p>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="password">Senha</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <input class="field__input" id="password" name="password" type="password" placeholder="Sua senha" autocomplete="current-password" data-rules="required" data-required="Informe sua senha.">
+          </div>
+          <p class="field__error" id="password-error" role="alert"></p>
+        </div>
+
+        <div class="form__options">
+          <label class="check">
+            <input type="checkbox" id="remember" name="remember">
+            <span>Lembrar de mim</span>
+          </label>
+          <a class="link link--muted" href="#">Esqueci minha senha</a>
+        </div>
+
+        <button class="btn" type="submit">
+          <span class="btn__label">ENTRAR</span>
+          <span class="btn__spinner" aria-hidden="true"></span>
+        </button>
+
+        <p class="form__signup">
+          Não tem conta ainda? <a class="link" id="signup-link" href="pages/cadastro-professor.html">Criar conta de professor</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+    <script src="js/core/ui.js"></script>
+  <script src="js/core/validators.js"></script>
+  <script src="js/core/masks.js"></script>
+  <script src="js/core/form.js"></script>
+  <script src="js/pages/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Criar conta de professor | ASSPROM</title>
+
+  <!-- Fonte do projeto (Inter) via Google Fonts, com fallback no CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <main class="login">
+
+    <!-- Painel esquerdo: apenas decorativo (padrão animado da marca) -->
+    <aside class="login__brand" aria-hidden="true"></aside>
+
+    <!-- Painel direito -->
+    <section class="login__panel">
+      <img class="login__logo login__logo--sm" src="../assets/img/logo.png" alt="ASSPROM">
+
+      <form class="form form--register" id="register-form" novalidate>
+        <h1 class="form__title">Criar conta de professor</h1>
+        <p class="form__subtitle">Gerencie turmas, chamadas e notas em um só lugar.</p>
+
+        <div class="field">
+          <label class="field__label" for="nome">Nome completo</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.5" r="2.7" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2.8 14c.4-2.6 2.6-4.2 5.2-4.2s4.8 1.6 5.2 4.2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <input class="field__input" id="nome" name="nome" type="text" placeholder="Seu nome completo" autocomplete="name" data-rules="required" data-required="Informe seu nome completo.">
+          </div>
+          <p class="field__error" id="nome-error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="email">E-mail institucional</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 4l6 4.5L14 4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <input class="field__input" id="email" name="email" type="email" placeholder="nome@escola.org.br" autocomplete="email" data-rules="required email" data-required="Informe seu e-mail institucional.">
+          </div>
+          <p class="field__error" id="email-error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="segmento">Segmento que leciona</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.5L1.5 6 8 9.5 14.5 6z" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M4 7.6v3c0 1 1.8 2 4 2s4-1 4-2v-3M14.5 6v4" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <select class="field__input field__input--select" id="segmento" name="segmento">
+              <option>Capacitação</option>
+              <option>Ensino Fundamental</option>
+              <option>Ensino Médio</option>
+              <option>Ensino Superior</option>
+            </select>
+          </div>
+          <p class="field__error" id="segmento-error" role="alert"></p>
+        </div>
+
+        <p class="notice">Você cria suas turmas depois de entrar, direto no painel.</p>
+
+        <div class="row">
+        <div class="field">
+          <label class="field__label" for="password">Senha</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <input class="field__input" id="password" name="password" type="password" placeholder="Crie uma senha" autocomplete="new-password" data-rules="required min6" data-required="Crie uma senha.">
+          </div>
+          <p class="field__error" id="password-error" role="alert"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="password2">Confirmar senha</label>
+          <div class="field__box">
+            <svg class="field__icon" viewBox="0 0 16 16" aria-hidden="true"><rect x="3" y="7" width="10" height="7" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+            <input class="field__input" id="password2" name="password2" type="password" placeholder="Repita a senha" autocomplete="new-password" data-rules="required match" data-match="password" data-required="Repita a senha.">
+          </div>
+          <p class="field__error" id="password2-error" role="alert"></p>
+        </div>
+        </div>
+
+        <!-- Termos de uso -->
+        <div class="field field--check">
+          <label class="check check--terms">
+            <input type="checkbox" id="terms" name="terms" data-rules="required" data-required="Aceite os termos para continuar.">
+            <span>Li e aceito os termos de uso e a política de privacidade</span>
+          </label>
+          <p class="field__error" id="terms-error" role="alert"></p>
+        </div>
+
+        <button class="btn" type="submit">
+          <span class="btn__label">Criar conta de professor</span>
+          <span class="btn__spinner" aria-hidden="true"></span>
+        </button>
+
+        <p class="form__signup">
+          Já tem conta? <a class="link" href="../index.html?tipo=professor">Entrar</a> · É aluno? <a class="link" href="cadastro-aluno.html">Cadastre-se como aluno</a>
+        </p>
+      </form>
+    </section>
+  </main>
+
+    <script src="../js/core/ui.js"></script>
+  <script src="../js/core/validators.js"></script>
+  <script src="../js/core/masks.js"></script>
+  <script src="../js/core/form.js"></script>
+  <script src="../js/pages/register.js"></script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+/* Telas de cadastro (aluno e professor) */
+.login__logo--sm { width: 220px; }
+.form--register { margin-top: 28px; }
+.form__title { margin: 0; font-size: 28px; font-weight: 500; }
+.form__subtitle { margin: 6px 0 22px; font-size: 14px; color: #444; }
+
+/* Termos de uso */
+.field--check { margin: 2px 0 0; }
+.check--terms { font-size: 13px; color: #333; }
+.field--invalid .check--terms { color: var(--danger); }
+.field--check .field__error { margin-left: 0; }
+
+.form--register .btn { margin-top: 18px; }
+
+@media (max-width: 480px) {
+  .login__logo { width: 240px; }
+}

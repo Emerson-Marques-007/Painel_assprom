@@ -1,0 +1,103 @@
+/* Campos de texto, select, linhas em duas colunas e mensagens de erro */
+.field { margin-bottom: 18px; }
+
+.field__label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* Caixa arredondada que envolve ícone + input */
+.field__box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--blue);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  background: transparent;
+  transition: box-shadow .25s, background-color .25s, transform .25s, border-color .25s;
+}
+
+/* ----- Efeito ao clicar para digitar (foco) -----
+   Quando o input recebe foco, o campo inteiro "acorda":
+   - a caixa clareia, sobe 1px e ganha um brilho azul que pulsa uma vez
+   - o ícone fica azul e dá um pequeno salto
+   - o rótulo (E-mail / Senha) fica azul e se desloca levemente
+   Também funciona para navegação por teclado (acessibilidade). */
+.field__box:focus-within {
+  background: rgba(255, 255, 255, .75);
+  border-color: var(--blue);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 3px rgba(69, 96, 225, .25),
+              0 8px 18px -8px rgba(69, 96, 225, .55);
+  animation: focus-pulse .6s ease-out;
+}
+.field__box:focus-within .field__icon {
+  color: var(--blue);
+  animation: icon-pop .35s ease-out;
+}
+.field__label { transition: color .25s, transform .25s; }
+.field:focus-within .field__label {
+  color: var(--blue);
+  transform: translateX(4px);
+}
+
+/* Anel de brilho que se expande e some ao focar */
+@keyframes focus-pulse {
+  from { box-shadow: 0 0 0 0 rgba(69, 96, 225, .55), 0 8px 18px -8px rgba(69, 96, 225, .55); }
+  to   { box-shadow: 0 0 0 3px rgba(69, 96, 225, .25), 0 8px 18px -8px rgba(69, 96, 225, .55); }
+}
+/* Pulinho do ícone */
+@keyframes icon-pop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.35) rotate(-8deg); }
+  100% { transform: scale(1); }
+}
+
+.field__icon { width: 15px; height: 15px; flex-shrink: 0; }
+
+/* Input "invisível": a aparência vem da .field__box */
+.field__input {
+  flex: 1;
+  min-width: 0;               /* deixa o input encolher dentro da caixa (evita desalinhar) */
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 13px;
+  color: var(--text);
+}
+.field__input::placeholder { color: var(--text-muted); }
+
+/* Estado de erro (classe adicionada pelo JS) */
+.field--invalid .field__box { border-color: var(--danger); }
+.field__error {
+  min-height: 14px;           /* reserva espaço para não "pular" o layout */
+  margin: 4px 16px 0;
+  font-size: 12px;
+  color: var(--danger);
+}
+
+/* Duas colunas (ex.: senha + confirmar senha).
+   minmax(0, 1fr) impede que o conteúdo do input alargue a coluna e desalinhe as caixas */
+.row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+
+/* Select com a mesma aparência (e o mesmo alinhamento de texto) dos inputs */
+.field__input--select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  color: var(--text);
+  padding: 0 22px 0 0;
+  text-indent: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%238a8a8a' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right center / 12px;
+}
+.field__box:has(.field__input--select) { color: var(--text); }
+
+@media (max-width: 480px) {
+  .row { grid-template-columns: 1fr; }
+}

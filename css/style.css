@@ -1,0 +1,13 @@
+/* ==========================================================
+   ASSPROM - Folha de estilos principal
+   Só importa os arquivos, na ordem certa (a ordem importa).
+   Para um novo componente: crie css/components/<nome>.css e importe aqui.
+   ========================================================== */
+@import url("base/variables.css");
+@import url("base/reset.css");
+@import url("layout/auth-layout.css");
+@import url("components/field.css");
+@import url("components/actions.css");
+@import url("components/tabs.css");
+@import url("components/notice.css");
+@import url("pages/register.css");
