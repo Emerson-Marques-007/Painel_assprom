@@ -104,10 +104,28 @@
   min-width: 0;
   padding: 27px 35px 28px;
   background:
+    /* Nova camada: luz azul suave que passeia lentamente pelo fundo. */
+    radial-gradient(ellipse, rgba(87, 116, 235, .13) 0%, rgba(87, 116, 235, 0) 68%) 0% 10% / 680px 560px no-repeat,
     radial-gradient(circle, rgba(69, 96, 225, .22) 1px, transparent 1.4px) 0 0 / 15px 15px,
     linear-gradient(135deg, #f1f2fb 40%, #e6e9fa);
+  animation: professor-bg-float 26s ease-in-out infinite;
   overflow: hidden;
 }
+/* Movimento lento apenas da nova camada de iluminação.
+   As camadas de pontilhado e gradiente base permanecem fixas. */
+@keyframes professor-bg-float {
+  0%, 100% {
+    background-position: 0% 10%, 0 0, 0 0;
+  }
+  50% {
+    background-position: 100% 85%, 0 0, 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main { animation: none; }
+}
+
 /* Anéis decorativos do canto superior direito */
 .main::before, .main::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
 .main::before { width: 380px; height: 380px; top: -190px; right: -115px; background: rgba(69, 96, 225, .07); }
