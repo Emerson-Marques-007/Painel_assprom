@@ -19,17 +19,20 @@ Site estático (HTML + CSS + JS puro, sem build).
 ├── pages/
 │   ├── cadastro-aluno.html
 │   ├── cadastro-professor.html
-│   └── painel.html            Painel provisório (prova que login/sessão funcionam)
+│   ├── painel.html            Roteador pós-login: professor → professor/dashboard.html (aluno ainda provisório)
+│   └── professor/
+│       └── dashboard.html     Dashboard do professor (menu lateral + cartões, listas e barras)
 ├── assets/img/                logo.png, pattern-tile.png
 ├── css/
 │   ├── style.css              Só importa os demais (a ordem importa)
 │   ├── base/                  variables.css (cores/fonte), reset.css
-│   ├── layout/                auth-layout.css (2 painéis + padrão animado)
-│   ├── components/            field, actions (botão), tabs, notice
-│   └── pages/                 register.css
+│   ├── layout/                auth-layout.css (login/cadastro), app-layout.css (menu lateral + conteúdo)
+│   ├── components/            field, actions (botão), tabs, notice, card (cartões, listas, selos, barras)
+│   └── pages/                 register.css, dashboard.css
 ├── js/
 │   ├── core/                  config, ui, validators, masks, auth, form
-│   └── pages/                 login.js, register.js, painel.js
+│   ├── data/                  dashboard.mock.js (DADOS FICTÍCIOS do dashboard)
+│   └── pages/                 login.js, register.js, painel.js, dashboard.js
 └── supabase/schema.sql        Tabela profiles, RLS e trigger de criação de perfil
 ```
 
@@ -44,7 +47,14 @@ Site estático (HTML + CSS + JS puro, sem build).
 **Login**
 - Professor entra com o e-mail institucional.
 - Aluno entra com a **matrícula**, que internamente vira o e-mail `20240187@aluno.assprom.app` (o Supabase Auth exige e-mail).
-- Após o login, vai para `pages/painel.html`.
+- Após o login, vai para `pages/painel.html`, que envia o **professor** para `pages/professor/dashboard.html`.
+
+**Dashboard do professor**
+- Saudação por horário, data de hoje, cartões de números, alunos que precisam de atenção, aulas de hoje e alunos por segmento.
+- Os dados vêm de `Assprom.dashboardData()` em `js/data/dashboard.mock.js` e são **fictícios**. Para ligar ao Supabase, troque só essa função, mantendo o formato do objeto devolvido.
+- Só entra quem está logado e é professor; do contrário volta ao login.
+- Itens do menu e botões ainda sem tela mostram o aviso "Em breve" (`data-soon`).
+- Prévia local sem login: abra `pages/professor/dashboard.html?demo` (mostra apenas os dados fictícios).
 
 ## Configuração (primeira vez)
 
@@ -86,6 +96,10 @@ Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serv
 | 7 | **`config.js` com valores de exemplo** | Sem preencher URL/anon key, o cadastro/login mostram "Supabase ainda não configurado". | Preencher antes do deploy. |
 | 8 | **Sem limite de tentativas próprio** | Dependemos do rate limit padrão do Supabase. | Ajustar em Authentication → Rate Limits; avaliar CAPTCHA. |
 | 9 | **Sem LGPD completa** | Guardamos nome, nascimento e telefone; os termos são só uma caixinha. | Páginas reais de termos/privacidade; política de exclusão de dados. |
+| 11 | **Dashboard com dados fictícios** | Os números (95 alunos, 91% etc.) não refletem a realidade. | Criar tabelas (turmas, aulas, presenças) com RLS e trocar `dashboardData()`. |
+| 12 | **Modo `?demo` no dashboard** | Qualquer um abre a tela sem login. Hoje só mostra dado fictício, mas deixa de ser seguro quando houver dado real. | Remover o `?demo` (em `js/pages/dashboard.js`) assim que os dados reais forem ligados. |
+| 13 | **Aluno sem painel** | Aluno logado cai no `painel.html` provisório. | Criar o dashboard do aluno. |
+| 14 | **Telas do menu inexistentes** | Turmas, Presenças, Calendário, Professores, Relatórios e Configurações mostram "Em breve". | Criar uma a uma, mantendo esta lista atualizada. |
 | 10 | **Supabase gratuito pausa por inatividade** | Projeto sem uso pode ser pausado. | Considerar plano pago antes de uso real. |
 
 ## Boas práticas ao evoluir
@@ -102,4 +116,5 @@ Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serv
 | Data | Ponto |
 |---|---|
 | 2026-10-30 | Envio do formulário era simulado: agora cadastra e autentica no Supabase. |
+| 2026-10-30 | Professor sem destino após o login: criado o dashboard (com dados fictícios, ver #11). |
 | 2026-10-30 | Aluno sem telefone não conseguia se cadastrar: caixinha "Não tenho telefone". |

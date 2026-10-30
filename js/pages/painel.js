@@ -3,6 +3,7 @@
   'use strict';
   A.auth.profile().then(function (p) {
     if (!p) { location.href = '../index.html'; return; }          // sem sessão: volta ao login
+    if (p.role === 'professor') { location.replace('professor/dashboard.html'); return; }  // professor vai para o dashboard
     document.getElementById('ola').textContent = 'Olá, ' + p.nome.split(' ')[0] + '!';
     document.getElementById('info').textContent =
       p.role === 'aluno' ? 'Aluno · matrícula ' + p.matricula + ' · ' + p.turma : 'Professor · ' + p.segmento;

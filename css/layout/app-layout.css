@@ -1,0 +1,117 @@
+/* Layout das telas internas (depois do login): menu lateral + conteúdo */
+.app-body { background: #eef0fa; }
+
+.app {
+  display: grid;
+  grid-template-columns: 215px minmax(0, 1fr);
+  min-height: 100vh;
+}
+
+/* ---------- Menu lateral ---------- */
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 14px 14px;
+  background: var(--blue);
+  color: #fff;
+  overflow: hidden;
+}
+/* Marca d'água da logo no rodapé do menu */
+.sidebar::before {
+  content: "";
+  position: absolute;
+  inset: 62% -40% -10% -40%;
+  background: url("../../assets/img/pattern-tile.png") 0 0 / 150px 60px repeat;
+  transform: rotate(-12deg);
+  opacity: .8;
+  pointer-events: none;
+}
+.sidebar > * { position: relative; }
+
+.sidebar__logo { width: 165px; max-width: 100%; margin: 0 0 24px 6px; filter: brightness(0) invert(1); }
+
+.nav { display: flex; flex-direction: column; gap: 5px; }
+.nav__item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  height: 40px;
+  padding: 0 17px;
+  border-radius: var(--radius-pill);
+  color: #fff;
+  font-size: 13.5px;
+  text-decoration: none;
+  transition: background-color .2s, color .2s, transform .2s;
+}
+.nav__item svg { width: 16px; height: 16px; flex-shrink: 0; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.nav__item:hover { background: rgba(255, 255, 255, .14); transform: translateX(2px); }
+.nav__item.is-active { background: #fff; color: var(--blue); box-shadow: 0 8px 18px -10px rgba(0, 0, 40, .6); }
+.nav__item.is-active:hover { transform: none; }
+.nav__badge {
+  margin-left: auto;
+  min-width: 21px;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, .22);
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+}
+.nav__badge:empty { display: none; }
+.nav__sep { width: 171px; max-width: 90%; margin: 14px auto; border: 0; border-top: 2px solid rgba(255, 255, 255, .3); }
+
+/* Usuário logado (rodapé do menu) */
+.sidebar__user {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px 10px 10px;
+  border-radius: 20px;
+  background: rgba(20, 30, 110, .45);
+}
+.sidebar__who { display: flex; flex-direction: column; min-width: 0; flex: 1; line-height: 1.25; }
+.sidebar__who strong { font-weight: 500; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sidebar__who small { font-size: 12px; opacity: .85; }
+
+.icon-btn {
+  display: grid; place-items: center;
+  width: 29px; height: 29px; flex-shrink: 0;
+  border: 0; border-radius: 50%;
+  background: rgba(255, 255, 255, .2);
+  color: #fff; cursor: pointer;
+  transition: background-color .2s;
+}
+.icon-btn:hover { background: rgba(255, 255, 255, .34); }
+.icon-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- Conteúdo ---------- */
+.main {
+  position: relative;
+  min-width: 0;
+  padding: 27px 35px 28px;
+  background:
+    radial-gradient(circle, rgba(69, 96, 225, .22) 1px, transparent 1.4px) 0 0 / 15px 15px,
+    linear-gradient(135deg, #f1f2fb 40%, #e6e9fa);
+  overflow: hidden;
+}
+/* Anéis decorativos do canto superior direito */
+.main::before, .main::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; }
+.main::before { width: 380px; height: 380px; top: -190px; right: -115px; background: rgba(69, 96, 225, .07); }
+.main::after  { width: 280px; height: 280px; top: -150px; right: -45px;  background: rgba(69, 96, 225, .06); }
+.main > * { position: relative; z-index: 1; }
+
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { position: static; height: auto; padding: 16px; }
+  .sidebar::before, .sidebar__who small { display: none; }
+  .sidebar__logo { width: 140px; margin-bottom: 12px; }
+  .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+  .nav__item { height: 36px; padding: 0 12px; gap: 8px; font-size: 13px; }
+  .nav__sep { display: none; }
+  .sidebar__user { margin-top: 12px; }
+  .main { padding: 20px 16px 28px; }
+}

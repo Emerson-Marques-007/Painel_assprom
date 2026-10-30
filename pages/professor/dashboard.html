@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | ASSPROM</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="app-body">
+  <div class="app">
+
+    <!-- ===== Menu lateral ===== -->
+    <aside class="sidebar">
+      <img class="sidebar__logo" src="../../assets/img/logo.png" alt="ASSPROM">
+
+      <nav class="nav" aria-label="Principal">
+        <a class="nav__item is-active" href="dashboard.html" aria-current="page">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav__item" href="#" data-soon>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.5-3.4 3-5.3 6-5.3s5.5 1.9 6 5.3"/><circle cx="17" cy="9" r="2.4"/><path d="M16.5 14.2c2.4 0 4.1 1.5 4.5 4.3"/></svg>
+          <span>Turmas</span><b class="nav__badge" id="nav-turmas"></b>
+        </a>
+        <a class="nav__item" href="#" data-soon>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M3.5 6l1.2 1.2L7 4.8M3.5 12l1.2 1.2L7 10.8M3.5 18l1.2 1.2L7 16.8"/></svg>
+          <span>Presenças</span>
+        </a>
+        <a class="nav__item" href="#" data-soon>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.4"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+          <span>Calendário</span>
+        </a>
+        <a class="nav__item" href="#" data-soon>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4L2.5 9 12 14l9.5-5z"/><path d="M6 11.2v4.3c0 1.5 2.7 3 6 3s6-1.5 6-3v-4.3M21.5 9v5.5"/></svg>
+          <span>Professores</span>
+        </a>
+        <a class="nav__item" href="#" data-soon>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V12M12 20V5M19 20v-9"/></svg>
+          <span>Relatórios</span>
+        </a>
+
+        <hr class="nav__sep">
+
+        <a class="nav__item" href="#" data-soon>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.4"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8"/></svg>
+          <span>Configurações</span>
+        </a>
+      </nav>
+
+      <div class="sidebar__user">
+        <span class="avatar avatar--light" id="user-initials">··</span>
+        <div class="sidebar__who">
+          <strong id="user-name">Carregando…</strong>
+          <small id="user-role">Professor</small>
+        </div>
+        <button class="icon-btn" id="logout" type="button" title="Sair" aria-label="Sair">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H6.5A2.5 2.5 0 0 0 4 6.5v11A2.5 2.5 0 0 0 6.5 20H10M15 8l4 4-4 4M19 12H9"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ===== Conteúdo ===== -->
+    <main class="main">
+      <header class="top">
+        <div class="top__title">
+          <span class="date-chip">
+            <span class="date-chip__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2.4"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg></span>
+            <span id="today">—</span>
+          </span>
+          <h1 class="greeting"><span id="greeting">Olá</span>, <em id="first-name"></em></h1>
+          <p class="top__sub" id="summary"></p>
+        </div>
+        <div class="top__actions">
+          <button class="pill pill--solid" type="button" data-soon>Fazer chamada</button>
+          <button class="pill" type="button" data-soon>Nova turma</button>
+          <button class="pill" type="button" data-soon>Novo aviso</button>
+        </div>
+      </header>
+
+      <label class="search">
+        <input id="search" type="search" placeholder="Buscar aluno ou turma  (Ctrl K)" autocomplete="off">
+      </label>
+
+      <section class="stats" id="stats" aria-label="Resumo"></section>
+
+      <div class="grid">
+        <section class="card">
+          <h2 class="card__title">Alunos que precisam de atenção</h2>
+          <ul class="list" id="attention"></ul>
+          <p class="card__hint">Clique em um aluno para abrir a janela dele.</p>
+        </section>
+
+        <div class="grid__side">
+          <section class="card">
+            <h2 class="card__title">Aulas de hoje</h2>
+            <ul class="list list--lessons" id="lessons"></ul>
+          </section>
+
+          <section class="card">
+            <h2 class="card__title">Alunos por segmento</h2>
+            <ul class="bars" id="segments"></ul>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/core/config.js"></script>
+  <script src="../../js/core/ui.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/data/dashboard.mock.js"></script>
+  <script src="../../js/pages/dashboard.js"></script>
+</body>
+</html>

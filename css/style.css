@@ -6,8 +6,11 @@
 @import url("base/variables.css");
 @import url("base/reset.css");
 @import url("layout/auth-layout.css");
+@import url("layout/app-layout.css");
 @import url("components/field.css");
 @import url("components/actions.css");
 @import url("components/tabs.css");
 @import url("components/notice.css");
+@import url("components/card.css");
 @import url("pages/register.css");
+@import url("pages/dashboard.css");
