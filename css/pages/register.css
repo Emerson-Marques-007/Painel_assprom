@@ -15,3 +15,7 @@
 @media (max-width: 480px) {
   .login__logo { width: 240px; }
 }
+
+/* Caixinha "Não tenho telefone" */
+.check--inline { margin: 8px 0 0 6px; font-size: 13px; color: #333; }
+.field__box:has(input:disabled) { opacity: .55; background: rgba(0, 0, 0, .04); }

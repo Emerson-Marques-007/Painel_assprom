@@ -22,7 +22,7 @@
     <section class="login__panel">
       <img class="login__logo login__logo--sm" src="../assets/img/logo.png" alt="ASSPROM">
 
-      <form class="form form--register" id="register-form" novalidate>
+      <form class="form form--register" id="register-form" data-role="aluno" novalidate>
         <h1 class="form__title">Criar conta de aluno</h1>
         <p class="form__subtitle">Acompanhe seu curso e confirme presença pelo celular.</p>
 
@@ -74,6 +74,10 @@
             <input class="field__input" id="telefone" name="telefone" type="tel" placeholder="(31) 90000-0000" autocomplete="tel" data-rules="required phone" data-mask="phone" data-required="Informe seu telefone.">
           </div>
           <p class="field__error" id="telefone-error" role="alert"></p>
+          <label class="check check--inline">
+            <input type="checkbox" id="sem-telefone" data-disables="telefone">
+            <span>Não tenho telefone</span>
+          </label>
         </div>
 
         <div class="row">
@@ -116,9 +120,12 @@
     </section>
   </main>
 
-    <script src="../js/core/ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/ui.js"></script>
   <script src="../js/core/validators.js"></script>
   <script src="../js/core/masks.js"></script>
+  <script src="../js/core/auth.js"></script>
   <script src="../js/core/form.js"></script>
   <script src="../js/pages/register.js"></script>
 </body>

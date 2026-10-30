@@ -22,7 +22,7 @@
     <section class="login__panel">
       <img class="login__logo login__logo--sm" src="../assets/img/logo.png" alt="ASSPROM">
 
-      <form class="form form--register" id="register-form" novalidate>
+      <form class="form form--register" id="register-form" data-role="professor" novalidate>
         <h1 class="form__title">Criar conta de professor</h1>
         <p class="form__subtitle">Gerencie turmas, chamadas e notas em um só lugar.</p>
 
@@ -98,9 +98,12 @@
     </section>
   </main>
 
-    <script src="../js/core/ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/ui.js"></script>
   <script src="../js/core/validators.js"></script>
   <script src="../js/core/masks.js"></script>
+  <script src="../js/core/auth.js"></script>
   <script src="../js/core/form.js"></script>
   <script src="../js/pages/register.js"></script>
 </body>

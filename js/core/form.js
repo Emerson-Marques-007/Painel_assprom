@@ -18,6 +18,18 @@
       input.addEventListener(evt, function () { A.setError(input, ''); });
     });
 
+    // Caixinhas que desativam um campo (ex.: "Não tenho telefone")
+    form.querySelectorAll('[data-disables]').forEach(function (box) {
+      const target = document.getElementById(box.dataset.disables);
+      const rules = target.dataset.rules;
+      box.addEventListener('change', function () {
+        target.disabled = box.checked;
+        if (box.checked) { target.value = ''; target.removeAttribute('data-rules'); }
+        else target.dataset.rules = rules;
+        A.setError(target, '');
+      });
+    });
+
     button.addEventListener('click', function (event) { A.ripple(button, event); });
 
     form.addEventListener('submit', function (event) {
@@ -32,14 +44,14 @@
       const data = Object.fromEntries(new FormData(form));
       if (options.onValid) options.onValid(data);
 
-      // TODO: enviar ao back-end, por exemplo:
-      // fetch('/api/...', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify(data) });
-      console.log('Formulário válido:', data);
-
-      // Simulação de 1,5s com spinner; troque pelo .finally() do fetch real
+      A.notify(form, '');
       A.setLoading(button, true);
-      setTimeout(function () { A.setLoading(button, false); }, 1500);
+      Promise.resolve(options.onSubmit ? options.onSubmit(data) : null)
+        .catch(function (err) {
+          A.notify(form, A.auth ? A.auth.message(err) : 'Ocorreu um erro. Tente novamente.', 'error');
+          A.shake(button);
+        })
+        .finally(function () { A.setLoading(button, false); });
     });
   };
 })(window.Assprom);

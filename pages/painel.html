@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel | ASSPROM</title>
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <main class="login">
+    <aside class="login__brand" aria-hidden="true"></aside>
+    <section class="login__panel">
+      <img class="login__logo login__logo--sm" src="../assets/img/logo.png" alt="ASSPROM">
+      <div class="form form--register">
+        <h1 class="form__title" id="ola">Carregando…</h1>
+        <p class="form__subtitle" id="info"></p>
+        <button class="btn" id="sair" type="button"><span class="btn__label">Sair</span></button>
+      </div>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/core/config.js"></script>
+  <script src="../js/core/ui.js"></script>
+  <script src="../js/core/auth.js"></script>
+  <script src="../js/pages/painel.js"></script>
+</body>
+</html>

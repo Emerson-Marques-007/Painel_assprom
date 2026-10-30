@@ -7,3 +7,5 @@
   color: #2a3fb0;
   font-size: 13px;
 }
+.notice--error   { background: rgba(214, 69, 69, .12); color: #b12a2a; }
+.notice--success { background: rgba(40, 167, 100, .14); color: #1d7a49; }

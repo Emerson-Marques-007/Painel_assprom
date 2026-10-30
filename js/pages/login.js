@@ -94,6 +94,10 @@
           localStorage.removeItem(STORAGE_KEY);
         }
       } catch (e) { /* ignorar */ }
+    },
+    onSubmit: async function () {
+      await A.auth.signIn(idInput.value, document.getElementById('password').value);
+      location.href = A.config.PAINEL_URL;
     }
   });
 })(window.Assprom);

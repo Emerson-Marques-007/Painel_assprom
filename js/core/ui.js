@@ -42,6 +42,20 @@ window.Assprom = window.Assprom || {};
     el.addEventListener('animationend', function () { el.remove(); });
   };
 
+  // Aviso no topo do botão (type: 'error' | 'success'); mensagem vazia remove
+  A.notify = function (form, message, type) {
+    let box = form.querySelector('.notice[data-form-notice]');
+    if (!message) { if (box) box.remove(); return; }
+    if (!box) {
+      box = document.createElement('p');
+      box.setAttribute('data-form-notice', '');
+      box.setAttribute('role', 'alert');
+      form.querySelector('.btn').before(box);
+    }
+    box.className = 'notice notice--' + (type || 'error');
+    box.textContent = message;
+  };
+
   // Liga/desliga o spinner do botão
   A.setLoading = function (button, isLoading) {
     button.classList.toggle('is-loading', isLoading);
