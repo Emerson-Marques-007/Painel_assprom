@@ -19,17 +19,34 @@
   color: #fff;
   overflow: hidden;
 }
-/* Marca d'água da logo no rodapé do menu */
+/* Mesmo efeito do painel esquerdo do login: padrão da logo deslizando na diagonal
+   + brilho que atravessa o menu. Camadas ficam atrás do conteúdo (z-index 0). */
 .sidebar::before {
   content: "";
   position: absolute;
-  inset: 62% -40% -10% -40%;
-  background: url("../../assets/img/pattern-tile.png") 0 0 / 150px 60px repeat;
-  transform: rotate(-12deg);
-  opacity: .8;
+  inset: -50%;
+  background: url("../../assets/img/pattern-tile.png") 0 0 / 180px 72px repeat;
+  transform: rotate(-15deg);
+  animation: sidebar-drift 24s linear infinite;
   pointer-events: none;
 }
-.sidebar > * { position: relative; }
+.sidebar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .16) 50%, transparent 65%);
+  background-size: 250% 100%;
+  animation: pattern-shine 9s ease-in-out infinite;   /* keyframes em auth-layout.css */
+  pointer-events: none;
+}
+.sidebar > * { position: relative; z-index: 1; }
+
+/* Desliza exatamente 1 tile (180x72): o fim é igual ao início, loop contínuo */
+@keyframes sidebar-drift { to { background-position: 180px 72px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar::before, .sidebar::after { animation: none; }
+}
 
 .sidebar__logo { width: 165px; max-width: 100%; margin: 0 0 24px 6px; filter: brightness(0) invert(1); }
 
@@ -107,7 +124,7 @@
 @media (max-width: 900px) {
   .app { grid-template-columns: 1fr; }
   .sidebar { position: static; height: auto; padding: 16px; }
-  .sidebar::before, .sidebar__who small { display: none; }
+  .sidebar__who small { display: none; }
   .sidebar__logo { width: 140px; margin-bottom: 12px; }
   .nav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
   .nav__item { height: 36px; padding: 0 12px; gap: 8px; font-size: 13px; }
