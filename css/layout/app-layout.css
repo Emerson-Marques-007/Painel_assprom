@@ -19,8 +19,7 @@
   color: #fff;
   overflow: hidden;
 }
-/* Mesmo efeito do painel esquerdo do login: padrão da logo deslizando na diagonal
-   + brilho que atravessa o menu. Camadas ficam atrás do conteúdo (z-index 0). */
+/* Padrão ASSPROM animado, limitado visualmente à metade inferior do menu. */
 .sidebar::before {
   content: "";
   position: absolute;
@@ -33,22 +32,13 @@
   animation: sidebar-drift 24s linear infinite;
   pointer-events: none;
 }
-.sidebar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .16) 50%, transparent 65%);
-  background-size: 250% 100%;
-  animation: pattern-shine 9s ease-in-out infinite;   /* keyframes em auth-layout.css */
-  pointer-events: none;
-}
 .sidebar > * { position: relative; z-index: 1; }
 
 /* Desliza exatamente 1 tile (180x72): o fim é igual ao início, loop contínuo */
 @keyframes sidebar-drift { to { background-position: 180px 72px; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .sidebar::before, .sidebar::after { animation: none; }
+  .sidebar::before { animation: none; }
 }
 
 .sidebar__logo { width: 165px; max-width: 100%; margin: 0 0 24px 6px; filter: brightness(0) invert(1); }
