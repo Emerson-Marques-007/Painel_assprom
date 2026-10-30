@@ -26,7 +26,7 @@
   position: absolute;
   inset: -50%;
   background: url("../../assets/img/pattern-tile.png") 0 0 / 180px 72px repeat;
-  transform: translateY(80px) rotate(-15deg);
+  transform: translateY(220px) rotate(-15deg);
   animation: sidebar-drift 24s linear infinite;
   pointer-events: none;
 }
