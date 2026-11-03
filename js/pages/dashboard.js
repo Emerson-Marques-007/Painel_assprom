@@ -20,19 +20,8 @@
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   };
-  const initials = function (nome) {
-    const p = nome.trim().split(/\s+/);
-    return ((p[0] || '')[0] + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
-  };
+  const initials = A.initials;
   const plural = function (n, one, many) { return n + ' ' + (n === 1 ? one : many); };
-
-  let toastTimer;
-  function toast(msg) {
-    const t = $('toast');
-    t.textContent = msg; t.hidden = false;
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { t.hidden = true; }, 2200);
-  }
 
   function header(profile, d) {
     const h = new Date().getHours();
@@ -44,9 +33,6 @@
     $('today').textContent = date.charAt(0).toUpperCase() + date.slice(1);
     $('summary').textContent = 'Você tem ' + plural(d.aulasHoje.total, 'aula', 'aulas') + ' hoje e ' +
       plural(d.pendencias.total, 'pendência', 'pendências') + ' para resolver.';
-    $('user-name').textContent = profile.nome;
-    $('user-initials').textContent = initials(profile.nome);
-    $('nav-turmas').textContent = d.turmas;
     document.title = 'Dashboard | ASSPROM';
   }
 
@@ -70,7 +56,7 @@
   function lists(d) {
     $('attention').innerHTML = d.atencao.length ? d.atencao.map(function (a) {
       const risk = a.nivel === 'risco';
-      return '<li class="list__row" tabindex="0" data-aluno="' + esc(a.nome) + '">' +
+      return '<li class="list__row" tabindex="0" data-href="turma.html?id=' + encodeURIComponent(a.turmaId) + '&aluno=' + encodeURIComponent(a.id) + '">' +
         '<span class="avatar">' + esc(initials(a.nome)) + '</span>' +
         '<span class="list__main"><strong>' + esc(a.nome) + '</strong><small>' + esc(a.turma) + '</small></span>' +
         '<span class="list__note">' + esc(a.motivo) + '</span>' +
@@ -94,37 +80,20 @@
   }
 
   function interactions() {
-    document.querySelectorAll('[data-soon]').forEach(function (el) {
-      el.addEventListener('click', function (e) { e.preventDefault(); toast('Em breve'); });
-    });
-    $('attention').addEventListener('click', function (e) {
-      const row = e.target.closest('[data-aluno]');
-      if (row) toast('Janela do aluno ' + row.dataset.aluno + ': em breve');
-    });
+    function abrir(e) {
+      const row = e.target.closest('[data-href]');
+      if (row && (e.type === 'click' || e.key === 'Enter')) location.href = row.dataset.href;
+    }
+    $('attention').addEventListener('click', abrir);
+    $('attention').addEventListener('keydown', abrir);
     document.addEventListener('keydown', function (e) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); $('search').focus(); }
     });
-    $('logout').addEventListener('click', function () {
-      const done = function () { location.href = '../../index.html'; };
-      try { A.auth.signOut().then(done, done); } catch (e) { done(); }
-    });
   }
 
-  // Quem pode ver: professor logado. "?demo" mostra só os dados fictícios (sem login).
-  async function whoAmI() {
-    if (new URLSearchParams(location.search).has('demo')) {
-      return { nome: 'Ana Souza', role: 'professor' };
-    }
-    const p = await A.auth.profile();
-    if (!p) { location.replace('../../index.html'); return null; }
-    if (p.role !== 'professor') { location.replace('../painel.html'); return null; }
-    return p;
-  }
-
-  whoAmI().then(function (profile) {
-    if (!profile) return;
+  A.shell.mount('dashboard').then(function (profile) {
     return A.dashboardData().then(function (d) {
       header(profile, d); stats(d); lists(d); interactions();
     });
-  }).catch(function () { location.replace('../../index.html'); });
+  });
 })(window.Assprom);

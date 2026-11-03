@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turmas | ASSPROM</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/img/assprom-favicon-minimal.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="app-body">
+  <div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main">
+      <header class="top">
+        <div class="top__title">
+          <span class="date-chip">
+            <span class="date-chip__icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3 19c.5-3.4 3-5.3 6-5.3s5.5 1.9 6 5.3"/><circle cx="17" cy="9" r="2.4"/><path d="M16.5 14.2c2.4 0 4.1 1.5 4.5 4.3"/></svg></span>
+            <span>Segmentos de informática</span>
+          </span>
+          <h1 class="greeting">Turmas</h1>
+          <p class="top__sub" id="resumo">&nbsp;</p>
+        </div>
+        <div class="top__actions">
+          <button class="pill pill--solid" id="nova" type="button">Nova turma</button>
+        </div>
+      </header>
+
+      <div class="chips" id="filtros" role="group" aria-label="Filtrar por segmento"></div>
+      <section class="turmas" id="turmas" aria-live="polite"></section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/core/config.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/modal.js"></script>
+  <script src="../../js/data/turmas.store.js"></script>
+  <script src="../../js/core/shell.js"></script>
+  <script src="../../js/core/turma-form.js"></script>
+  <script src="../../js/pages/turmas.js"></script>
+</body>
+</html>

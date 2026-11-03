@@ -12,5 +12,9 @@
 @import url("components/tabs.css");
 @import url("components/notice.css");
 @import url("components/card.css");
+@import url("components/modal.css");
 @import url("pages/register.css");
 @import url("pages/dashboard.css");
+@import url("pages/turmas.css");
+@import url("pages/turma.css");
+@import url("pages/compartilhar.css");

@@ -1,0 +1,57 @@
+/* Compartilhar turma */
+.top--share .top__title { flex: 1 1 420px; }
+.top--share .top__actions { flex-shrink: 0; margin-top: 18px; align-self: flex-start; }
+.grid--share { margin-top: 16px; }
+.grid__main { display: flex; flex-direction: column; gap: 16px; }
+
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.opts--stack { grid-template-columns: 1fr; gap: 8px; }
+.opt {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 10px 12px;
+  border: 1.5px solid #dfe2f5; border-radius: 17px; background: #fff;
+  font: inherit; text-align: left; color: var(--text); cursor: pointer;
+  transition: border-color .2s, background-color .2s;
+}
+.opt:hover { border-color: #b9c2f2; }
+.opt.is-on { border-color: var(--blue); background: #eef0fb; }
+.opt__ico { display: grid; place-items: center; width: 29px; height: 29px; margin-bottom: 8px; border-radius: 9px; background: #e3e7fb; color: var(--blue); }
+.opt__ico svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.opt strong { font-size: 14px; font-weight: 500; }
+.opt small { font-size: 12px; color: #444; }
+.opts--stack .opt { flex-direction: row; align-items: center; gap: 10px; padding: 8px 12px; }
+.opts--stack .opt__ico { margin: 0; }
+.opts--stack .opt__t { display: flex; flex-direction: column; }
+
+.invite { display: flex; gap: 8px; margin-bottom: 8px; }
+.invite input {
+  flex: 1; min-width: 0; height: 33px; padding: 0 16px; border: 1.5px solid var(--blue); border-radius: var(--radius-pill);
+  background: #f2f2f2; font: inherit; font-size: 13px; outline: 0;
+}
+.invite input:focus { background: #fff; box-shadow: 0 0 0 3px rgba(69, 96, 225, .25); }
+.invite .pill { height: 33px; }
+.list--people .list__row { cursor: default; padding: 9px 0; }
+.list--people .list__row:hover { background: none; }
+.list--people .list__main strong { font-size: 14px; }
+.level {
+  height: 30px; padding: 0 30px 0 14px; border: 1.5px solid #cfd4f2; border-radius: var(--radius-pill);
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232a3fb0' stroke-width='2.5' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 10px center / 12px;
+  color: var(--blue); font: inherit; font-size: 13px; cursor: pointer; appearance: none; -webkit-appearance: none; outline: 0;
+}
+.level:focus { border-color: var(--blue); }
+
+.card--note, .card--temp { display: flex; align-items: center; gap: 12px; padding: 12px 17px; }
+.card--note p { margin: 0; font-size: 13.5px; line-height: 1.35; }
+.note__icon { display: grid; place-items: center; flex-shrink: 0; width: 35px; height: 35px; border-radius: 11px; background: #e3e7fb; color: var(--blue); }
+.note__icon svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.temp__text { flex: 1; display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
+.temp__text strong { font-size: 13.5px; font-weight: 500; }
+.temp__text small { font-size: 12.5px; color: #444; }
+.temp__date { margin-top: 4px; width: 150px; padding: 4px 8px; border: 1.5px solid #cfd4f2; border-radius: 10px; font: inherit; font-size: 12.5px; }
+
+.timeline { list-style: none; margin: 0; padding: 0 0 0 4px; position: relative; display: flex; flex-direction: column; gap: 14px; }
+.timeline::before { content: ""; position: absolute; left: 10px; top: 8px; bottom: 8px; width: 2px; background: #dfe2f5; }
+.timeline li { position: relative; padding-left: 26px; line-height: 1.3; }
+.timeline li::before { content: ""; position: absolute; left: 0; top: 3px; width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid var(--blue); box-sizing: border-box; }
+.timeline strong { display: block; font-size: 13.5px; font-weight: 500; }
+.timeline small { font-size: 12px; color: #555; }
+@media (max-width: 600px) { .opts { grid-template-columns: 1fr; } .top--share .top__actions { width: 100%; } }

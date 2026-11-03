@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Turma | ASSPROM</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/img/assprom-favicon-minimal.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="app-body">
+  <div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main">
+      <nav class="crumbs" aria-label="Você está em">
+        <a href="turmas.html">Turmas</a> / <span id="crumb">…</span>
+      </nav>
+
+      <header class="head">
+        <span class="sigla" id="sigla"></span>
+        <div class="head__text">
+          <h1 class="head__title" id="titulo"></h1>
+          <p class="head__sub" id="sub"></p>
+        </div>
+        <div class="head__actions">
+          <button class="pill pill--solid" id="chamada" type="button" data-soon>Chamada da turma</button>
+          <button class="round-btn" id="editar" type="button" title="Editar turma" aria-label="Editar turma"></button>
+          <button class="round-btn round-btn--danger" id="apagar" type="button" title="Apagar turma" aria-label="Apagar turma"></button>
+        </div>
+      </header>
+
+      <div class="turma-body" id="corpo">
+        <section class="minis" id="minis" aria-label="Resumo da turma"></section>
+
+        <section class="card card--table">
+          <div class="toolbar">
+            <label class="search search--sm"><input id="busca" type="search" placeholder="Buscar aluno" autocomplete="off"></label>
+            <div class="chips chips--sm" id="filtros" role="group" aria-label="Filtrar alunos"></div>
+          </div>
+          <div class="tbl" id="tabela" role="table" aria-label="Alunos da turma"></div>
+        </section>
+      </div>
+
+      <div class="dock" id="dock" aria-label="Janelas minimizadas"></div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/core/config.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/modal.js"></script>
+  <script src="../../js/data/turmas.store.js"></script>
+  <script src="../../js/core/shell.js"></script>
+  <script src="../../js/core/turma-form.js"></script>
+  <script src="../../js/pages/turma.js"></script>
+</body>
+</html>

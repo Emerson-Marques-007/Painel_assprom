@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compartilhar turma | ASSPROM</title>
+  <link rel="icon" type="image/x-icon" href="../../assets/img/assprom-favicon-minimal.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../../css/style.css">
+</head>
+<body class="app-body">
+  <div class="app">
+    <aside class="sidebar" id="sidebar"></aside>
+
+    <main class="main">
+      <nav class="crumbs" aria-label="Você está em">
+        <a href="turmas.html">Turmas</a> / <a id="crumb" href="turmas.html">…</a>
+      </nav>
+
+      <header class="top top--share">
+        <div class="top__title">
+          <h1 class="greeting">Compartilhar turma</h1>
+          <p class="top__sub">Dê acesso à turma inteira ou a um aluno e escolha o que cada professor pode fazer.</p>
+        </div>
+        <div class="top__actions top__actions--share">
+          <button class="pill pill--danger" id="parar" type="button"><span class="pill__ico" id="ico-parar"></span>Parar de compartilhar</button>
+          <button class="pill" id="cancelar" type="button">Cancelar</button>
+          <button class="pill pill--solid" id="salvar" type="button">Salvar acesso</button>
+        </div>
+      </header>
+
+      <div class="grid grid--share">
+        <div class="grid__main">
+          <section class="card">
+            <h2 class="card__title">O que compartilhar</h2>
+            <div class="opts" id="escopo"></div>
+            <label class="mfield mfield--inline" id="linha-aluno" hidden>
+              <span>Aluno</span><select id="aluno-sel"></select>
+            </label>
+          </section>
+
+          <section class="card">
+            <h2 class="card__title">Quem tem acesso</h2>
+            <form class="invite" id="convite" autocomplete="off">
+              <input id="convite-nome" list="lista-profs" type="text" placeholder="Nome ou e-mail do professor" aria-label="Nome ou e-mail do professor">
+              <datalist id="lista-profs"></datalist>
+              <button class="pill pill--solid" type="submit">Convidar</button>
+            </form>
+            <p class="notice notice--error" id="convite-erro" hidden role="alert"></p>
+            <ul class="list list--people" id="acessos"></ul>
+          </section>
+        </div>
+
+        <div class="grid__side">
+          <section class="card card--note">
+            <span class="note__icon" id="ico-lock"></span>
+            <p>Observações privadas nunca aparecem para o aluno.</p>
+          </section>
+
+          <section class="card card--temp">
+            <span class="note__icon" id="ico-clock"></span>
+            <div class="temp__text">
+              <strong>Acesso temporário</strong>
+              <small id="temp-info"></small>
+              <input class="temp__date" id="temp-data" type="date" aria-label="Data de término do acesso" hidden>
+            </div>
+            <button class="switch" id="temp-switch" type="button" role="switch" aria-checked="false" aria-label="Acesso temporário"><i></i></button>
+          </section>
+
+          <section class="card">
+            <h2 class="card__title">Quem vê as observações</h2>
+            <div class="opts opts--stack" id="visib"></div>
+          </section>
+
+          <section class="card">
+            <h2 class="card__title">Atividade recente</h2>
+            <ol class="timeline" id="atividade"></ol>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/core/config.js"></script>
+  <script src="../../js/core/auth.js"></script>
+  <script src="../../js/core/modal.js"></script>
+  <script src="../../js/data/turmas.store.js"></script>
+  <script src="../../js/core/shell.js"></script>
+  <script src="../../js/pages/compartilhar.js"></script>
+</body>
+</html>
