@@ -13,13 +13,17 @@
 
   const STATUS = { ok: ['Em dia', 'badge--ok'], atencao: ['Atenção', 'badge--warn'], risco: ['Risco', 'badge--risk'] };
   const VISIB = { privada: 'privada', professores: 'só professores', aluno: 'aluno e família' };
-  function iniAutor(autor) {
+  function iniAutor(o) {
+    if (o.autorNome) return A.initials(o.autorNome);
+    const autor = o.autor;
     if (autor === 'Você') return A.initials(A.perfil.nome);
     const nome = autor.replace(/^Profa?\.\s*/, '');
     const p = S.PROFESSORES.filter(function (x) { return x.nome.split(' ')[0] === nome.split(' ')[0]; })[0];
     return A.initials(p ? p.nome : nome);
   }
-  function corAutor(autor) {
+  function corAutor(o) {
+    if (o.autorNome) return A.avatarClass(o.autorNome);
+    const autor = o.autor;
     if (autor === 'Você') return A.avatarClass(A.perfil.nome);
     const nome = autor.replace(/^Profa?\.\s*/, '');
     const p = S.PROFESSORES.filter(function (x) { return x.nome.split(' ')[0] === nome.split(' ')[0]; })[0];
@@ -39,6 +43,7 @@
     $('titulo').textContent = t.nome;
     $('sub').textContent = t.segmentoNome + ' · ' + t.qtdAlunos + (t.qtdAlunos === 1 ? ' aluno' : ' alunos') + ' · ' + t.regra;
     document.title = t.nome + ' | ASSPROM';
+    $('editar').hidden = !t.souDono; $('apagar').hidden = !t.souDono;
     const mini = function (ico, cls, rotulo, valor) {
       const c = h('div', { class: 'minicard' }, h('span', { class: 'minicard__ico ' + cls }), h('div', {}, h('small', { text: rotulo }), h('strong', { text: valor })));
       c.querySelector('.minicard__ico').innerHTML = A.icon(ico); return c;
@@ -69,7 +74,7 @@
       const st = STATUS[a.status];
       const mid = pontos
         ? h('div', { class: 'dots', 'aria-label': 'Presença por dia' }, ...a.presencas.map(function (p, i) {
-            const nomes = { p: 'presente', f: 'faltou', h: 'hoje', x: 'ainda não chegou' };
+            const nomes = { p: 'presente', f: 'faltou', h: 'hoje', x: i + 1 < t.diaAtual ? 'sem registro' : 'ainda não chegou' };
             return h('i', { class: 'dot dot--' + p, title: t.unidade + ' ' + (i + 1) + ': ' + nomes[p] });
           }))
         : h('span', { class: 'tr__sumario', text: a.presencas.filter(function (p) { return p === 'p'; }).length + ' presenças · ' + a.faltas + ' faltas' });
@@ -114,7 +119,7 @@
     A.modal.confirm({ title: 'Remover ' + a.nome + '?', message: 'O aluno sai da turma ' + turma.nome + ' e o histórico de presenças dele é apagado. Isso não pode ser desfeito.',
       confirmLabel: 'Remover aluno', danger: true }).then(function (sim) {
       if (!sim) return;
-      S.removeAluno(a.id).then(function () { delete wins[a.id]; delete mins[a.id]; if (ativa === a.id) ativa = null; A.toast('Aluno removido'); return recarregar(); });
+      S.removeAluno(a.id).then(function () { delete wins[a.id]; delete mins[a.id]; if (ativa === a.id) ativa = null; A.toast('Aluno removido'); return recarregar(); }, function (e) { A.toast(e.message); });
     });
   }
 
@@ -197,7 +202,7 @@
     if (p === 'p') return ['p', n === turma.diaAtual ? 'Presente hoje' : 'Presente'];
     if (p === 'f') return ['f', 'Faltou'];
     if (p === 'h') return ['h', 'Hoje'];
-    return ['x', n === turma.diaAtual + 1 ? 'Amanhã' : S.dm(S.dataDoDia(turma, n))];
+    return ['x', n < turma.diaAtual ? 'Sem registro' : n === turma.diaAtual + 1 ? 'Amanhã' : S.dm(S.dataDoDia(turma, n))];
   }
 
   function abaResumo(a) {
@@ -229,7 +234,7 @@
     }
     const o = a.observacoes[0];
     const obsHtml = o
-      ? '<div class="obs"><span class="avatar ' + corAutor(o.autor) + '">' + esc(iniAutor(o.autor)) + '</span><div><small>' + esc(o.autor) + ' · ' + esc(o.data) + ' · ' + VISIB[o.visibilidade] + '</small><p>' + esc(o.texto) + '</p></div></div>'
+      ? '<div class="obs"><span class="avatar ' + corAutor(o) + '">' + esc(iniAutor(o)) + '</span><div><small>' + esc(o.autor) + ' · ' + esc(o.data) + ' · ' + VISIB[o.visibilidade] + '</small><p>' + esc(o.texto) + '</p></div></div>'
       : '<div class="obs"><div><small>Observações</small><p>Nenhuma observação ainda.</p></div></div>';
     return '<div class="trio">' +
       '<div class="trio__c"><small>' + t.unidade + ' atual</small><strong>' + t.diaAtual + ' de ' + t.total + '</strong><em>' + esc(conteudoAtual) + '</em></div>' +
@@ -258,7 +263,7 @@
     let li = '';
     for (let n = 1; n <= turma.diaAtual; n++) {
       const p = a.presencas[n - 1], d = S.dm(S.dataDoDia(turma, n));
-      const quando = p === 'p' ? 'Presente · 08:0' + ((n + a.nome.length) % 6) : p === 'f' ? 'Falta' : 'Aguardando QR';
+      const quando = p === 'p' ? 'Presente' : p === 'f' ? 'Falta' : n < turma.diaAtual ? 'Sem registro' : 'Aguardando QR';
       li += '<li><span>' + t2(n) + ' · ' + d + '</span><span class="badge ' + (p === 'p' ? 'badge--ok' : p === 'f' ? 'badge--risk' : 'tag') + '">' + esc(quando) + '</span></li>';
     }
     return '<div class="trio" style="margin-bottom:10px"><div class="trio__c"><small>Frequência</small><strong>' + (a.freq === null ? '—' : a.freq + '%') + '</strong></div>' +
@@ -270,7 +275,7 @@
 
   function abaObs(a) {
     const lista = a.observacoes.map(function (o) {
-      return '<div class="obs"><span class="avatar ' + corAutor(o.autor) + '">' + esc(iniAutor(o.autor)) + '</span><div><small>' + esc(o.autor) + ' · ' + esc(o.data) + ' · ' + VISIB[o.visibilidade] + '</small><p>' + esc(o.texto) + '</p></div></div>';
+      return '<div class="obs"><span class="avatar ' + corAutor(o) + '">' + esc(iniAutor(o)) + '</span><div><small>' + esc(o.autor) + ' · ' + esc(o.data) + ' · ' + VISIB[o.visibilidade] + '</small><p>' + esc(o.texto) + '</p></div></div>';
     }).join('') || '<p class="card__hint">Nenhuma observação ainda.</p>';
     return '<div class="obs-form"><textarea id="obs-texto" rows="3" placeholder="Escreva uma observação sobre o aluno" aria-label="Observação"></textarea>' +
       '<select id="obs-visib" aria-label="Quem pode ver"><option value="privada">Privada (só você)</option><option value="professores" selected>Professores com acesso</option><option value="aluno">Aluno e família</option></select>' +
@@ -294,8 +299,8 @@
       if (act === 'salvar-obs') {
         const txt = document.getElementById('obs-texto').value.trim();
         if (!txt) { A.toast('Escreva a observação primeiro'); return; }
-        S.addObservacao(a.id, { texto: txt, visibilidade: document.getElementById('obs-visib').value, autor: 'Você' })
-          .then(function () { A.toast('Observação salva'); return recarregar(); });
+        S.addObservacao(a.id, { turmaId: turma.id, texto: txt, visibilidade: document.getElementById('obs-visib').value, autor: 'Você', autorNome: A.perfil.nome })
+          .then(function () { A.toast('Observação salva'); return recarregar(); }, function (e) { A.toast(e.message); });
       }
     });
   }
@@ -318,10 +323,10 @@
     $('apagar').addEventListener('click', function () {
       A.modal.confirm({ title: 'Apagar ' + turma.nome + '?', message: 'Os ' + turma.qtdAlunos + ' alunos e o histórico de presenças desta turma também serão apagados. Isso não pode ser desfeito.',
         confirmLabel: 'Apagar turma', danger: true }).then(function (sim) {
-        if (sim) S.deleteTurma(turma.id).then(function () { location.href = 'turmas.html'; });
+        if (sim) S.deleteTurma(turma.id).then(function () { location.href = 'turmas.html'; }, function (e) { A.toast(e.message); });
       });
     });
-    return recarregar();
+    return recarregar().catch(function (e) { $('tabela').innerHTML = ''; $('tabela').appendChild(h('div', { class: 'tr--empty', text: e.message || 'Não foi possível carregar a turma.' })); });
   }).then(function () {
     const alvo = params.get('aluno');
     if (turma && alvo && aluno(alvo)) abrirJanela(alvo);

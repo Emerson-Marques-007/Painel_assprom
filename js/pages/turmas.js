@@ -16,10 +16,11 @@
     const card = h('article', { class: 'tcard', style: 'animation-delay:' + (i * 40) + 'ms' },
       h('div', { class: 'tcard__head' },
         h('span', { class: 'sigla', text: t.sigla }),
-        h('div', { class: 'tcard__name' }, h('strong', { text: t.nome }), h('small', { text: t.regra })),
-        h('div', { class: 'tcard__btns' },
+        h('div', { class: 'tcard__name' }, h('strong', { text: t.nome }),
+          h('small', { text: t.souDono ? t.regra : t.regra + ' · de ' + (t.donoNome || 'outro professor') })),
+        t.souDono ? h('div', { class: 'tcard__btns' },
           icone('round-btn', 'edit', 'Editar ' + t.nome, function () { A.turmaForm(t, turmas, recarregar); }),
-          icone('round-btn round-btn--danger', 'trash', 'Apagar ' + t.nome, function () { apagar(t); }))),
+          icone('round-btn round-btn--danger', 'trash', 'Apagar ' + t.nome, function () { apagar(t); })) : null),
       h('div', { class: 'tcard__prog' },
         h('span', { class: 'tag tag--' + t.segmento, text: t.segmentoNome }),
         h('span', { text: t.unidade + ' ' + t.diaAtual + ' de ' + t.total })),
@@ -56,6 +57,11 @@
     lista.forEach(function (t, i) { box.appendChild(cartao(t, i)); });
   }
 
+  function erroCarga(e) {
+    $('turmas').innerHTML = '';
+    $('turmas').appendChild(h('p', { class: 'empty-block', text: (e && e.message) || 'Não foi possível carregar as turmas.' }));
+  }
+
   function recarregar() {
     return S.listTurmas().then(function (l) {
       turmas = l; render();
@@ -69,13 +75,13 @@
       message: 'Os ' + t.qtdAlunos + ' alunos e o histórico de presenças desta turma também serão apagados. Isso não pode ser desfeito.',
       confirmLabel: 'Apagar turma', danger: true
     }).then(function (sim) {
-      if (sim) S.deleteTurma(t.id).then(function () { A.toast('Turma apagada'); return recarregar(); });
+      if (sim) S.deleteTurma(t.id).then(function () { A.toast('Turma apagada'); return recarregar(); }, function (e) { A.toast(e.message); });
     });
   }
 
   A.shell.mount('turmas').then(function () {
     $('nova').addEventListener('click', function () { A.turmaForm(null, turmas, recarregar); });
-    return recarregar();
+    return recarregar().catch(erroCarga);
   }).then(function () {
     if (new URLSearchParams(location.search).has('nova')) {          // veio do atalho "Nova turma" do dashboard
       history.replaceState(null, '', location.pathname);

@@ -107,7 +107,7 @@ window.Assprom = window.Assprom || {};
         } else if (f.type === 'textarea') {
           input = h('textarea', { name: f.name, id: 'mf-' + f.name, rows: 3, placeholder: f.placeholder || '' });
         } else {
-          input = h('input', { name: f.name, id: 'mf-' + f.name, type: 'text', placeholder: f.placeholder || '', autocomplete: 'off' });
+          input = h('input', { name: f.name, id: 'mf-' + f.name, type: f.type === 'date' ? 'date' : 'text', placeholder: f.placeholder || '', autocomplete: 'off' });
         }
         input.value = f.value == null ? '' : f.value;
         input.addEventListener('input', refresh); input.addEventListener('change', refresh);

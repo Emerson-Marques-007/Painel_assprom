@@ -7,3 +7,6 @@ body {
   color: var(--text);
   font-size: 14px;
 }
+
+/* "hidden" sempre esconde, mesmo em elementos com display definido */
+[hidden] { display: none !important; }

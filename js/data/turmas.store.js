@@ -175,14 +175,15 @@ window.Assprom = window.Assprom || {};
     } else if (!res.length) motivo = 'Ainda sem presença no ' + SEGMENTOS[t.segmento].unidade + ' 1';
     return Object.assign({}, a, { freq: freq, faltas: faltas, status: status, motivo: motivo, turmaNome: t.nome, turmaSegmento: t.segmento });
   }
-  function decTurma(t) {
+  // Junta a turma com seus alunos e calcula tudo que a tela mostra (usado também pelo Supabase)
+  function decTurmaCom(t, alunosRaw) {
     const r = regraDe(t.segmento, t.variante), seg = SEGMENTOS[t.segmento];
-    const al = load().alunos.filter(function (a) { return a.turmaId === t.id; }).map(function (a) { return decAluno(a, t); });
+    const al = alunosRaw.map(function (a) { return decAluno(a, t); });
     const comFreq = al.filter(function (a) { return a.freq !== null; });
     const hojeP = al.filter(function (a) { return a.presencas[t.diaAtual - 1] === 'p'; }).length;
     const hojeF = al.filter(function (a) { return a.presencas[t.diaAtual - 1] === 'f'; }).length;
     return Object.assign({}, t, {
-      sigla: siglaDe(t.nome), regra: r.texto, total: r.total, unidade: seg.unidade, segmentoNome: seg.nome,
+      souDono: t.souDono !== false, sigla: siglaDe(t.nome), regra: r.texto, total: r.total, unidade: seg.unidade, segmentoNome: seg.nome,
       qtdAlunos: al.length,
       freq: comFreq.length ? Math.round(comFreq.reduce(function (s, a) { return s + a.freq; }, 0) / comFreq.length) : null,
       freqHoje: hojeP + hojeF ? Math.round(hojeP / (hojeP + hojeF) * 100) : null,
@@ -190,10 +191,28 @@ window.Assprom = window.Assprom || {};
       alunos: al
     });
   }
+  function decTurma(t) {
+    return decTurmaCom(t, load().alunos.filter(function (a) { return a.turmaId === t.id; }));
+  }
+
+  // Resumo do dashboard a partir da lista de turmas já calculada
+  function resumoDe(ts) {
+    const al = ts.reduce(function (l, t) { return l.concat(t.alunos); }, []);
+    const comFreq = al.filter(function (a) { return a.freq !== null; });
+    const seg = {};
+    ts.forEach(function (t) { seg[t.segmento] = (seg[t.segmento] || 0) + t.qtdAlunos; });
+    return {
+      turmas: ts.length, alunos: al.length,
+      freqMedia: comFreq.length ? Math.round(comFreq.reduce(function (s, a) { return s + a.freq; }, 0) / comFreq.length) : 0,
+      porSegmento: seg,
+      atencao: al.filter(function (a) { return a.status !== 'ok'; })
+        .sort(function (x, y) { return (x.status === y.status ? 0 : x.status === 'risco' ? -1 : 1) || x.freq - y.freq; })
+    };
+  }
   const find = function (id) { return load().turmas.filter(function (t) { return t.id === id; })[0]; };
   const ok = function (v) { return Promise.resolve(v); };
 
-  A.store = {
+  const local = {
     SEGMENTOS: SEGMENTOS, CONTEUDOS_CAP: CONTEUDOS_CAP, MODULOS_APR: MODULOS_APR, PROFESSORES: PROFESSORES,
     regraDe: regraDe, siglaDe: siglaDe, conteudoDoDia: conteudoDoDia, dataDoDia: dataDoDia, addDiasUteis: addDiasUteis, dm: dm, DIAS: DIAS,
 
@@ -230,7 +249,7 @@ window.Assprom = window.Assprom || {};
     addObservacao: function (alunoId, o) {    // {texto, visibilidade, autor}
       load(); const a = db.alunos.filter(function (x) { return x.id === alunoId; })[0];
       const d = new Date();
-      a.observacoes.unshift({ id: nextId('o'), autor: o.autor, data: dm(d), visibilidade: o.visibilidade, texto: o.texto });
+      a.observacoes.unshift({ id: nextId('o'), autor: o.autor, autorNome: o.autorNome, data: dm(d), visibilidade: o.visibilidade, texto: o.texto });
       save(); return ok(true);
     },
     getShare: function (turmaId) {
@@ -242,20 +261,29 @@ window.Assprom = window.Assprom || {};
     saveShare: function (turmaId, cfg) { load(); db.share[turmaId] = cfg; save(); return ok(true); },
 
     // Resumo para o dashboard
-    resumo: function () {
-      return A.store.listTurmas().then(function (ts) {
-        const al = ts.reduce(function (l, t) { return l.concat(t.alunos); }, []);
-        const comFreq = al.filter(function (a) { return a.freq !== null; });
-        const seg = {};
-        ts.forEach(function (t) { seg[t.segmento] = (seg[t.segmento] || 0) + t.qtdAlunos; });
-        return {
-          turmas: ts.length, alunos: al.length,
-          freqMedia: comFreq.length ? Math.round(comFreq.reduce(function (s, a) { return s + a.freq; }, 0) / comFreq.length) : 0,
-          porSegmento: seg,
-          atencao: al.filter(function (a) { return a.status !== 'ok'; })
-            .sort(function (x, y) { return (x.status === y.status ? 0 : x.status === 'risco' ? -1 : 1) || x.freq - y.freq; })
-        };
-      });
-    }
+    resumo: function () { return local.listTurmas().then(resumoDe); },
+
+    // Professores para convidar (aqui: lista fixa de exemplo)
+    buscarProfessor: function (q) {
+      const t = A.semAcento(q.trim());
+      return ok(PROFESSORES.filter(function (p) { return p.email === t || A.semAcento(p.nome).indexOf(t) !== -1; })
+        .map(function (p) { return Object.assign({ id: p.nome }, p); }));
+    },
+    sugestoesProfessores: function () { return ok(PROFESSORES.map(function (p) { return Object.assign({ id: p.nome }, p); })); }
   };
+
+  // ---------- qual armazenamento usar ----------
+  // Demonstração (?demo): dados fictícios no navegador. Login de verdade: Supabase (turmas.supabase.js).
+  A.localStore = local;
+  A.calc = { decAluno: decAluno, decTurmaCom: decTurmaCom, resumoDe: resumoDe };
+  const METODOS = ['listTurmas', 'getTurma', 'saveTurma', 'deleteTurma', 'saveAluno', 'removeAluno', 'addObservacao',
+    'getShare', 'saveShare', 'resumo', 'buscarProfessor', 'sugestoesProfessores'];
+  const demo = function () { return !!(A.shell && A.shell.isDemo()); };
+  const alvo = function () { return demo() || !A.remoteStore ? local : A.remoteStore; };
+  A.store = {};
+  ['SEGMENTOS', 'CONTEUDOS_CAP', 'MODULOS_APR', 'PROFESSORES', 'regraDe', 'siglaDe', 'conteudoDoDia', 'dataDoDia', 'addDiasUteis', 'dm', 'DIAS']
+    .forEach(function (k) { A.store[k] = local[k]; });
+  METODOS.forEach(function (m) { A.store[m] = function () { const a = alvo(); return a[m].apply(a, arguments); }; });
+  Object.defineProperty(A.store, 'temInicio', { get: function () { return !demo(); } });          // data de início só existe no Supabase
+  Object.defineProperty(A.store, 'convitePendente', { get: function () { return demo(); } });     // convidar quem ainda não tem conta
 })(window.Assprom);

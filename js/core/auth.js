@@ -30,7 +30,7 @@
       const aluno = role === 'aluno';
       const meta = aluno
         ? { role: role, nome: d.nome.trim(), matricula: d.matricula, nascimento: isoDate(d.nascimento),
-            turma: d.turma, telefone: d.telefone || null }   // sem telefone => null
+            turma_id: d.turma, turma: d.turmaNome || null, telefone: d.telefone || null }   // sem telefone => null
         : { role: role, nome: d.nome.trim(), segmento: d.segmento };
       const res = await A.db().auth.signUp({
         email: aluno ? studentEmail(d.matricula) : d.email.trim().toLowerCase(),

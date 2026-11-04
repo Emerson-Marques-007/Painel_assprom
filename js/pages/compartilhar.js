@@ -10,7 +10,7 @@
     ['professores', 'turmas', 'Professores', 'Quem tem acesso à turma'],
     ['aluno', 'eye', 'Aluno e família', 'Todos podem ver']
   ];
-  let turma = null, cfg = null, dono = 'Você', salvos = [];
+  let turma = null, cfg = null, dono = 'Você', salvos = [], sugestoes = [];
 
   const isoParaBr = function (iso) { const p = (iso || '').split('-'); return p.length === 3 ? p[2] + '/' + p[1] + '/' + p[0] : ''; };
   const ico = function (el, nome) { el.innerHTML = A.icon(nome); return el; };
@@ -56,8 +56,8 @@
     });
     $('parar').disabled = !cfg.acessos.length;
     const dl = $('lista-profs'); dl.innerHTML = '';
-    S.PROFESSORES.filter(function (p) { return !cfg.acessos.some(function (x) { return x.nome === p.nome; }); })
-      .forEach(function (p) { dl.appendChild(h('option', { value: p.nome, label: p.segmento + ' · ' + p.email })); });
+    sugestoes.filter(function (p) { return !cfg.acessos.some(function (x) { return x.nome === p.nome; }); })
+      .forEach(function (p) { dl.appendChild(h('option', { value: p.nome, label: p.segmento + (p.email ? ' · ' + p.email : '') })); });
   }
 
   function temporario() {
@@ -96,13 +96,17 @@
     erro.hidden = true;
     const falha = function (m) { erro.textContent = m; erro.hidden = false; };
     if (!txt) return falha('Digite o nome ou o e-mail do professor.');
-    const q = A.semAcento(txt);
-    const conhecido = S.PROFESSORES.filter(function (p) { return A.semAcento(p.nome) === q || p.email === q || A.semAcento(p.nome).indexOf(q) === 0; })[0];
-    const nome = conhecido ? conhecido.nome : (txt.indexOf('@') !== -1 ? nomeDoEmail(txt) : txt);
-    if (A.semAcento(nome) === A.semAcento(dono)) return falha('Você já é a proprietária desta turma.');
-    if (cfg.acessos.some(function (p) { return A.semAcento(p.nome) === A.semAcento(nome); })) return falha('Esse professor já tem acesso.');
-    cfg.acessos.push({ nome: nome, segmento: conhecido ? conhecido.segmento : 'Convite pendente', nivel: 'ver' });
-    campo.value = ''; acessos();
+    if (A.semAcento(txt) === A.semAcento(dono)) return falha('Você já é a proprietária desta turma.');
+    S.buscarProfessor(txt).then(function (achados) {
+      const q = A.semAcento(txt);
+      let p = achados.length === 1 ? achados[0] : achados.filter(function (x) { return A.semAcento(x.nome) === q || x.email === q; })[0];
+      if (!p && achados.length > 1) return falha('Mais de um professor encontrado. Use o e-mail completo.');
+      if (!p && S.convitePendente) p = { id: txt, nome: txt.indexOf('@') !== -1 ? nomeDoEmail(txt) : txt, segmento: 'Convite pendente' };   // demonstração
+      if (!p) return falha('Nenhum professor encontrado. A pessoa precisa criar a conta de professor primeiro.');
+      if (cfg.acessos.some(function (x) { return x.profId === p.id || A.semAcento(x.nome) === A.semAcento(p.nome); })) return falha('Esse professor já tem acesso.');
+      cfg.acessos.push({ profId: p.id, nome: p.nome, segmento: p.segmento, nivel: 'ver' });
+      campo.value = ''; acessos();
+    }, function (e) { falha(e.message); });
   }
 
   function salvar() {
@@ -115,7 +119,7 @@
     S.saveShare(turma.id, cfg).then(function () {
       salvos = cfg.acessos.map(function (p) { return p.nome; });
       atividade(); A.toast('Acesso salvo');
-    });
+    }, function (e) { A.toast(e.message); });
   }
 
   function parar() {
@@ -123,7 +127,7 @@
       confirmLabel: 'Parar de compartilhar', danger: true }).then(function (sim) {
       if (!sim) return;
       cfg.acessos = []; cfg.atividade.unshift({ texto: 'Você parou de compartilhar', quando: 'agora' });
-      S.saveShare(turma.id, cfg).then(function () { salvos = []; desenhar(); A.toast('Compartilhamento encerrado'); });
+      S.saveShare(turma.id, cfg).then(function () { salvos = []; desenhar(); A.toast('Compartilhamento encerrado'); }, function (e) { A.toast(e.message); });
     });
   }
 
@@ -137,6 +141,9 @@
   }).then(function (c) {
     if (!c) return;
     cfg = c; salvos = cfg.acessos.map(function (p) { return p.nome; });
+    return S.sugestoesProfessores().catch(function () { return []; }).then(function (l) { sugestoes = l; return c; });
+  }).then(function (c) {
+    if (!c) return;
     const alvo = params.get('aluno');
     if (alvo && turma.alunos.some(function (a) { return a.id === alvo; })) { cfg.escopo = 'aluno'; cfg.alunoId = alvo; }
     $('crumb').textContent = turma.nome; $('crumb').href = 'turma.html?id=' + encodeURIComponent(turma.id);
@@ -154,5 +161,10 @@
     $('salvar').addEventListener('click', salvar);
     $('cancelar').addEventListener('click', function () { location.href = 'turma.html?id=' + encodeURIComponent(turma.id); });
     desenhar();
-  });
+    if (!turma.souDono) {                                   // só o dono muda o compartilhamento
+      document.querySelectorAll('.grid--share button, .grid--share input, .grid--share select, #parar, #salvar').forEach(function (el) { el.disabled = true; });
+      $('convite-erro').textContent = 'Só quem criou a turma (' + (turma.donoNome || 'o proprietário') + ') pode alterar o compartilhamento.';
+      $('convite-erro').hidden = false;
+    }
+  }).catch(function (e) { A.toast((e && e.message) || 'Não foi possível carregar.'); });
 })(window.Assprom);
