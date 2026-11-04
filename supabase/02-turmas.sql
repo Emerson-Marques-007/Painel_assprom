@@ -145,7 +145,7 @@ create policy "professor vê professores" on public.profiles for select to authe
   using (role = 'professor' and public.sou_professor());
 
 -- Cada pessoa só pode alterar o próprio nome e telefone (nunca papel, turma ou matrícula)
-revoke insert, update, delete on public.profiles from anon, authenticated;
+revoke all on public.profiles from anon, authenticated;
 grant update (nome, telefone) on public.profiles to authenticated;
 
 -- Presenças: professor com acesso vê; só dono/editor registra; o aluno vê as dele
@@ -222,6 +222,8 @@ revoke all on public.turmas, public.presencas, public.observacoes,
 -- criadas por SQL sozinhos; sem estas linhas aparece "permission denied" ao criar turma.
 -- (As regras de linha acima continuam decidindo quem vê/altera o quê.)
 grant usage on schema public to anon, authenticated;
+revoke truncate, references, trigger on public.turmas, public.presencas, public.observacoes,
+      public.turma_compartilhamento, public.turma_acessos, public.turma_atividade from authenticated;
 grant select on public.profiles to authenticated;
 grant select, insert, update, delete on public.turmas, public.presencas, public.observacoes,
       public.turma_compartilhamento, public.turma_acessos, public.turma_atividade to authenticated;
