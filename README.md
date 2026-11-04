@@ -39,7 +39,8 @@ Site estático (HTML + CSS + JS puro, sem build).
 │   └── pages/                 login, register, painel, dashboard, turmas, turma, compartilhar
 ├── supabase/
 │   ├── schema.sql             Tabela profiles, RLS e trigger de criação de perfil (rode primeiro)
-│   └── 02-turmas.sql          Turmas, presenças, observações, compartilhamento, regras de acesso (RLS) e funções (rode depois)
+│   ├── 02-turmas.sql          Turmas, presenças, observações, compartilhamento, regras de acesso (RLS), permissões e funções (rode depois)
+│   └── diagnostico.sql        Só leitura: mostra tabelas, permissões, regras e contas (para achar problemas)
 ```
 
 ## Como funciona
@@ -149,6 +150,7 @@ Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serv
 | 26 | **Convite só para quem já tem conta** | Compartilhar exige que o professor já tenha criado a conta; não há convite por e-mail pendente. | Fluxo de convite por e-mail (Supabase Auth invite) se for necessário. |
 | 27 | **"Dia N" sem feriados nem recesso** | O dia da turma conta dias úteis desde a data de início. | Tabela de feriados/recessos ou "dia da aula" gravado quando a chamada for feita. |
 | 28 | **Apagar turma desvincula os alunos** | Os alunos continuam com a conta, mas sem turma (e perdem o vínculo; observações e presenças da turma somem). | Arquivar em vez de apagar (ver #19). |
+| 29 | **Permissões das tabelas no Supabase novo** | Projetos novos não liberam tabelas criadas por SQL para quem está logado: sem os `grant` (já no `02-turmas.sql`) a criação de turma dá "permission denied". | Ao criar tabela nova, inclua `grant ... to authenticated` e rode `supabase/diagnostico.sql` se algo falhar. |
 
 ## Boas práticas ao evoluir
 
@@ -172,3 +174,4 @@ Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serv
 | 2026-11-04 | Turmas só existiam no `localStorage` (cada navegador via turmas diferentes): agora ficam no Supabase, com regras de acesso no banco (antigos #15 a #17). |
 | 2026-11-04 | Lista de turmas do cadastro do aluno era fixa no HTML: agora vem das turmas criadas pelos professores (antigo #4). |
 | 2026-11-04 | Qualquer usuário podia alterar o próprio `role` em `profiles`: agora só nome e telefone são editáveis pelo próprio usuário. |
+| 2026-11-04 | Não era possível criar turma mesmo após rodar o SQL (tabelas sem permissão para `authenticated`): `02-turmas.sql` agora concede as permissões; adicionado `supabase/diagnostico.sql`. |

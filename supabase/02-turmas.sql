@@ -218,6 +218,16 @@ create policy "atividade: registrar" on public.turma_atividade for insert to aut
 revoke all on public.turmas, public.presencas, public.observacoes,
               public.turma_compartilhamento, public.turma_acessos, public.turma_atividade from anon;
 
+-- Permissões das tabelas para quem está logado. Projetos novos do Supabase NÃO liberam tabelas
+-- criadas por SQL sozinhos; sem estas linhas aparece "permission denied" ao criar turma.
+-- (As regras de linha acima continuam decidindo quem vê/altera o quê.)
+grant usage on schema public to anon, authenticated;
+grant select on public.profiles to authenticated;
+grant select, insert, update, delete on public.turmas, public.presencas, public.observacoes,
+      public.turma_compartilhamento, public.turma_acessos, public.turma_atividade to authenticated;
+grant all on public.turmas, public.presencas, public.observacoes,
+      public.turma_compartilhamento, public.turma_acessos, public.turma_atividade to service_role;
+
 -- ======================================================================
 -- 4) Funções chamadas pelo site
 -- ======================================================================
