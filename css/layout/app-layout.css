@@ -19,22 +19,8 @@
   color: #fff;
   overflow: hidden;
 }
-<<<<<<< HEAD
 /* Padrão ASSPROM animado, limitado visualmente à metade inferior do menu. */
 .sidebar::before {
-=======
-/* Janela do efeito (só do meio para baixo): padrão da logo deslizando na diagonal
-   + brilho, igual ao painel esquerdo do login. A borda de cima some suavemente. */
-.sidebar__pattern {
-  position: absolute;
-  top: 48%; right: 0; bottom: 0; left: 0;
-  overflow: hidden;
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 22%);
-          mask-image: linear-gradient(to bottom, transparent, #000 22%);
-}
-.sidebar__pattern::before {
->>>>>>> e25c6a8 (Telas de Turmas: lista, turma com janela do aluno e compartilhar; menu compartilhado; README)
   content: "";
   position: absolute;
   inset: -50%;
@@ -44,30 +30,15 @@
   mask-image: linear-gradient(to bottom, transparent 0 48%, #000 52%);
   transform: translateY(80px) rotate(-15deg);
   animation: sidebar-drift 24s linear infinite;
+  pointer-events: none;
 }
-<<<<<<< HEAD
-=======
-.sidebar__pattern::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, .16) 50%, transparent 65%);
-  background-size: 250% 100%;
-  animation: pattern-shine 9s ease-in-out infinite;   /* keyframes em auth-layout.css */
-}
->>>>>>> e25c6a8 (Telas de Turmas: lista, turma com janela do aluno e compartilhar; menu compartilhado; README)
 .sidebar > * { position: relative; z-index: 1; }
-.sidebar > .sidebar__pattern { position: absolute; z-index: 0; }   /* atrás do menu */
 
 /* Desliza exatamente 1 tile (180x72): o fim é igual ao início, loop contínuo */
 @keyframes sidebar-drift { to { background-position: 180px 72px; } }
 
 @media (prefers-reduced-motion: reduce) {
-<<<<<<< HEAD
   .sidebar::before { animation: none; }
-=======
-  .sidebar__pattern::before, .sidebar__pattern::after { animation: none; }
->>>>>>> e25c6a8 (Telas de Turmas: lista, turma com janela do aluno e compartilhar; menu compartilhado; README)
 }
 
 .sidebar__logo { width: 165px; max-width: 100%; margin: 0 0 24px 6px; filter: brightness(0) invert(1); }

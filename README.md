@@ -97,6 +97,16 @@ Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serv
 
 ---
 
+## Próximos passos sugeridos
+
+1. **Ligar Turmas ao Supabase:** tabelas de turmas, alunos, presenças, observações e acessos com RLS; trocar o corpo de `Assprom.store` (ver #15 a #17).
+2. **Presenças com QR code:** tela da professora (planilha + QR da aula) e leitura no celular do aluno.
+3. **Painel do aluno:** início, meu curso, frequência, calendário, avisos e perfil.
+4. **Calendário, Professores, Relatórios e Configurações** do professor.
+5. Fechar com a coordenação as regras pendentes (#21 e #22).
+
+---
+
 # Pontos de atenção
 
 > **Regra do projeto:** a cada mudança relevante (nova tabela, nova página, nova regra de acesso, mudança de configuração), revise esta seção:
@@ -147,3 +157,4 @@ Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serv
 | 2026-10-30 | Aluno sem telefone não conseguia se cadastrar: caixinha "Não tenho telefone". |
 | 2026-11-03 | Professor sem telas de turma: criadas Turmas, Turma + janela do aluno e Compartilhar (dados fictícios, ver #15 a #19). |
 | 2026-11-03 | Menu lateral do professor ganhou o efeito animado do login (só do meio para baixo). |
+| 2026-11-03 | CSS do menu lateral com marcadores de conflito (`<<<<<<<`) após aplicar um patch: corrigido; sempre conferir `git diff` e buscar `<<<<<<<` antes de commitar. |

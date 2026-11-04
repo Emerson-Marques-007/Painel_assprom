@@ -86,7 +86,6 @@ window.Assprom = window.Assprom || {};
         '<span>' + m.label + '</span>' + (m.badge ? '<b class="nav__badge" id="nav-turmas"></b>' : '') + '</a>';
     }).join('');
     side.innerHTML =
-      '<div class="sidebar__pattern" aria-hidden="true"></div>' +
       '<img class="sidebar__logo" src="../../assets/img/logo.png" alt="ASSPROM">' +
       '<nav class="nav" aria-label="Principal">' + items + '</nav>' +
       '<div class="sidebar__user"><span class="avatar avatar--light"></span>' +
