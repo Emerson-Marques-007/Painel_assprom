@@ -12,7 +12,9 @@ window.Assprom = window.Assprom || {};
   function traduz(e) {
     const m = (e && e.message) || '';
     if (e && e.code === '23505') return /turmas_nome/.test(m) ? 'Já existe uma turma com esse nome.' : 'Esse registro já existe.';
-    if (/does not exist|schema cache|Could not find the (table|function)/i.test(m)) return 'O banco ainda não tem as tabelas de turmas. Rode supabase/02-turmas.sql no SQL Editor do Supabase (veja o README).';
+    if (/does not exist|schema cache|Could not find the (table|function|column)/i.test(m)) {
+      return 'O banco não encontrou algo das turmas. Rode supabase/02-turmas.sql no SQL Editor do Supabase e depois: notify pgrst, \'reload schema\'; (veja o README). Detalhe: ' + m;
+    }
     if (/row-level security|permission denied/i.test(m)) return 'Você não tem permissão para fazer isso. (' + (e.code ? e.code + ': ' : '') + m + ')';
     if (/fetch|network/i.test(m)) return 'Sem conexão com o servidor. Verifique sua internet.';
     return m ? m + (e.code ? ' (' + e.code + ')' : '') : 'Não foi possível concluir. Tente novamente.';

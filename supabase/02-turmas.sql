@@ -310,3 +310,8 @@ begin
   );
   return new;
 end $$;
+
+-- ======================================================================
+-- 6) Avisa a API do Supabase que o esquema mudou (sem isso, às vezes ela só enxerga as tabelas novas depois de alguns minutos)
+-- ======================================================================
+notify pgrst, 'reload schema';

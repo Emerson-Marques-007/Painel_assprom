@@ -89,6 +89,19 @@ Site estático (HTML + CSS + JS puro, sem build).
 
 Para testar local, sirva a pasta com qualquer servidor estático (ex.: `npx serve`) ou abra `index.html` direto no navegador.
 
+## Se algo der errado com as turmas
+
+Mensagem **"O banco não encontrou algo das turmas…"** (o texto termina com o detalhe técnico):
+1. No Supabase, **SQL Editor**, rode o `supabase/02-turmas.sql` inteiro e confira se terminou com "Success". Se aparecer erro vermelho, nada do arquivo foi aplicado: copie a mensagem.
+2. Rode `notify pgrst, 'reload schema';` (a API às vezes demora a enxergar tabelas novas).
+3. Confira se as tabelas existem e se o `config.js` aponta para o **mesmo projeto** em que rodou o SQL:
+   ```sql
+   select to_regclass('public.turmas') as turmas, to_regclass('public.presencas') as presencas,
+          (select count(*) from information_schema.columns where table_name = 'profiles' and column_name = 'turma_id') as coluna_turma_id;
+   ```
+   Os três valores precisam vir preenchidos (`turmas`, `presencas` e `1`).
+4. Ainda com erro? No navegador, F12 → aba **Network** → clique na requisição vermelha → **Response**: o texto exato do erro ajuda a achar a causa.
+
 ## Como estender
 
 - **Nova página:** `pages/<nome>.html` + `js/pages/<nome>.js` (+ `css/pages/<nome>.css` importado em `css/style.css`).
