@@ -42,3 +42,6 @@
   .list__note { text-align: left; flex-basis: 100%; order: 3; padding-left: 42px; }
   .search { max-width: none; }
 }
+
+/* Aviso de erro no lugar dos cartões de números */
+.stats > .notice { grid-column: 1 / -1; margin: 0; }

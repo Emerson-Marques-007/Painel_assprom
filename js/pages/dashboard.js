@@ -94,6 +94,12 @@
   A.shell.mount('dashboard').then(function (profile) {
     return A.dashboardData().then(function (d) {
       header(profile, d); stats(d); lists(d); interactions();
+    }, function (erro) {
+      // Sem dados (ex.: banco sem as tabelas de turmas): mostra a saudação e explica o que houve
+      header(profile, { aulasHoje: { total: 0 }, pendencias: { total: 0 }, turmas: 0 });
+      $('summary').textContent = '';
+      $('stats').innerHTML = '<p class="notice notice--error" role="alert">' + esc((erro && erro.message) || 'Não foi possível carregar os dados do dashboard.') + '</p>';
+      interactions();
     });
   });
 })(window.Assprom);

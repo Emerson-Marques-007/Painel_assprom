@@ -102,7 +102,7 @@ window.Assprom = window.Assprom || {};
       const soon = e.target.closest('[data-soon]');
       if (soon) { e.preventDefault(); A.toast('Em breve'); }
     });
-    A.store.listTurmas().then(function (l) { const b = document.getElementById('nav-turmas'); if (b) b.textContent = l.length; });
+    A.store.listTurmas().then(function (l) { const b = document.getElementById('nav-turmas'); if (b) b.textContent = l.length; }, function () { /* o erro aparece na própria tela */ });
   }
 
   A.shell = {
